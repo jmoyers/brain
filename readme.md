@@ -22,6 +22,8 @@
 
 - testing - jest
 - front matter parser - gray-matter
+- yaml - js-yaml
+- toml - toml
 - command line parser - yargs
 - fuzzy finder library - fuzzysort
 - javascript object transform (group by, inversion) - lodash

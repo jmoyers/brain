@@ -29,8 +29,11 @@ const getMetaData = async (files: string[]) => {
     }
 
     if (meta_block.length) {
-      const parsed = matter(meta_block.join("\n"));
-      meta[file] = parsed.data;
+      // it's okay to fail sometimes...
+      try {
+        const parsed = matter(meta_block.join("\n"));
+        meta[file] = parsed.data;
+      } catch (e) {}
     }
   }
 

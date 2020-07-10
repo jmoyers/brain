@@ -6,6 +6,7 @@ const readdir = promisify(_readdir);
 const stat = promisify(_stat);
 
 const ignoreList: Array<string> = [
+  ".brain",
   "__pycache__",
   "node_modules",
   ".git",
