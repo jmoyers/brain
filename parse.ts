@@ -4,16 +4,16 @@ import fs from "fs";
 
 const readFile = util.promisify(fs.readFile);
 
-const getMetaData = async (files) => {
+const getMetaData = async (files: string[]) => {
   const meta = {};
 
   for (const file of files) {
-    const contents = await readFile(file, "utf8");
+    const contents: string = await readFile(file, "utf8");
 
-    const lines = contents.split("\n");
+    const lines: string[] = contents.split("\n");
 
-    const meta_block = [];
-    let meta_start = false;
+    const meta_block: string[] = [];
+    let meta_start: boolean = false;
 
     for (const line of lines) {
       if (line == "---" && !meta_start) {

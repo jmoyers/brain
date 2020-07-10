@@ -5,7 +5,7 @@ import { promisify } from "util";
 const readdir = promisify(_readdir);
 const stat = promisify(_stat);
 
-const ignoreList = [
+const ignoreList: Array<string> = [
   "__pycache__",
   "node_modules",
   ".git",
@@ -35,7 +35,10 @@ const includesIgnored = (path: Array<string> | string): boolean => {
   return false;
 };
 
-const getAllFiles = async (dirPath, results?) => {
+const getAllFiles = async (
+  dirPath: string,
+  results?: Array<string>
+): Promise<Array<string>> => {
   if (includesIgnored(dirPath)) return results;
 
   const files = await readdir(dirPath);

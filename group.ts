@@ -20,9 +20,9 @@
  *    Number of Islands
  */
 
-const groupBy = (meta) => {
+const groupBy = (meta: Object) => {
   // get a list of all properties on all files
-  const known = {};
+  const known: Object = {};
 
   // we'll key off of invidivual property names (e.g. title, number, difficulty)
 
