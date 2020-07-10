@@ -1,57 +1,50 @@
-# design notes
+# Brain Notes
 
 ## features
 
-define a workspace (root directory), default current directory
+- [x] read front matter recursively in any non-excluded file or directory
+- [x] allow group by any front matter property (e.g. group by tags or tag value)
+- [x] fuzzy file finder for file autocomplete in workspace
+- [ ] exclude list .brainignore, exclude binary files by default for parsing
+- [ ] .brain cache/database - we need a db for binary files
 
-exclude list .brainignore
+---
 
-read front matter recursively in any non-excluded file or directory
-
-allow group by any front matter property (e.g. group by tags or tag value)
-
-fuzzy file finder for file autocomplete in workspace
-
--- mvp --
-
-spaced reptition based note review
-
-allow nth group by (group by tag THEN frequency THEN difficulty)
-
-broken link finder
-
-move/rename diff detection
-
-content-type plugin utility
-
-cache/database
+- [ ] spaced reptition based note review
+- [ ] allow nth group by (group by tag THEN frequency THEN difficulty)
+- [ ] broken link finder
+- [ ] move/rename diff detection
+- [ ] content-type plugin utility
 
 ## code
 
-testing
-jest
+### library selection
 
-front matter parser
-gray-matter
+- testing - jest
+- front matter parser - gray-matter
+- command line parser - yargs
+- fuzzy finder library - fuzzysort
+- javascript object transform (group by, inversion) - lodash
 
-command line parser
-yargs
+### design
 
-fuzzy finder library
-fuzzysort
+the goal is to retain funcitonality for a command line app, so we have a nice
+clear seperation of concerns and we don't get too linked to a vscode
+extension. this is so somebody could conceivably use it bare with markdown
+files, or create a vim extension etc.
 
-javascript object transform (group by, inversion)
-lodash
+#### options
 
-api vs command line -- a function for every command line sub-command
--w, --workspace workspace, global option, default cwd
-non-mvp, -e, --exclude .brainignore default
+##### add [file/default recursive walk from ./]
 
-build:
-read front matter recursively in any non-excluded file or directory
-this will be implicit until caching
+read front matter recursively in any non-excluded file or directory. this is an
+implicit functionality, though we are going to need a database for binary files
+regardless, so its a little silly to have two sources for such information.
+however, at the risk of a design wart, we'll optimize for working within the
+editor context directly
 
-group
+##### group
+
 allow group by any front matter property (e.g. group by tags or tag value)
 
 find
@@ -60,8 +53,13 @@ return a list of potential matches by matchyness
 
 ## structure
 
-main.js - command line parsing, require all functions in
-fuzzy.js - fuzzy find files in workspace
-group.js - group by front matter attributes, incl tags
-parse.js - get front matter from all files in workspace
-files.js - recursively list all files not ignored, parse .brainignore
+- [x] fuzzy.js - fuzzy find files in workspace
+- [x] group.js - group by front matter attributes, incl tags
+- [x] parse.js - get front matter from all files in workspace
+- [x] files.js - recursively list all files not ignored, parse .brainignore
+- extension/ (vscode specific files)
+  - [x] extension.js - root of vscode extension, register tree view
+  - [x] BrainTreeDataProvider.js - the attribute tree view
+- [ ] write.js - write .brain file with all attributes
+- [ ] attr.js - write a new attribute to be associated witha file
+- [ ] main.js - command line parsing, require all functions in
