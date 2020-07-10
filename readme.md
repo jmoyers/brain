@@ -50,6 +50,9 @@ files, or create a vim extension etc.
 - store parsed meta data information in the form file -> metadata
 - we transform that structure in memory to more interesting formats, e.g. tags ->
   dynamic programming -> list of files
+- think we put it in a directory .brain/database, so we can easily use this
+  later to cache/expand to multiple files if we need some gitlike functionality,
+  or downloading online resources like videos
 
 #### options
 
@@ -89,8 +92,11 @@ this is something like this: "'dyanmic programming' in tags order by difficulty
 - extension/ (vscode specific files)
   - [x] extension.js - root of vscode extension, register tree view
   - [x] BrainTreeDataProvider.js - the attribute tree view
-- [ ] write.js - write .brain file with all attributes
-- [ ] attr.js - write a new attribute to be associated witha file
+  - [ ] AttributeView.js - edit attributes for a file, right hand view
+  - [ ] Autocomplete.js - [[context]] aware file/note autocomplete
+  - [ ] RelatedView.js - show other notes which are attribute related
+- [ ] brain.js - given a meta structure, write and read .brain
+- [ ] attr.js - given a meta structure, write or read attr for a given file
 - [ ] main.js - command line parsing, require all functions in
 
 ## idea bucket
@@ -107,3 +113,6 @@ this is something like this: "'dyanmic programming' in tags order by difficulty
 - link to other brains. imagine git cloning someone elses notes and then
   referring to them from your own. other referring directly to a github address
   a la golang modules
+- investigate document embedded videos/images for markdown. a reference to a
+  video that was used to internalize a concept is probably the way to go.
+  optionally download the videos/images and cache them in a .brain
