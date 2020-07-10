@@ -33,6 +33,24 @@ clear seperation of concerns and we don't get too linked to a vscode
 extension. this is so somebody could conceivably use it bare with markdown
 files, or create a vim extension etc.
 
+#### .brain database
+
+- purpose
+  - avoid full recursive walk of file system, even when no changes
+  - allow binary files such as pdfs, images, videos to be tracked in your
+    notetaking. we can't necessary store meta data directly in any content
+- negatives
+  - now we have to deal with getting out of sync with reality
+  - files move, get renamed, now we're left with dangling references. we can
+    detect dangling reference and allow the user to make a repair manually
+    easily. more sophisticated rename/move detection would require git-like
+    functionality which is a big hesitation.
+- json, yaml, toml exchangable formats - in addition to it being human readable,
+  its also human editable. may turn out to be an easy way to tag a ton of stuff quickly
+- store parsed meta data information in the form file -> metadata
+- we transform that structure in memory to more interesting formats, e.g. tags ->
+  dynamic programming -> list of files
+
 #### options
 
 ##### add [file/default recursive walk from ./]
@@ -42,6 +60,12 @@ implicit functionality, though we are going to need a database for binary files
 regardless, so its a little silly to have two sources for such information.
 however, at the risk of a design wart, we'll optimize for working within the
 editor context directly
+
+also here we need to detect dangling references -- file got moved, deleted,
+renamed. really don't want to lose meta data that isn't stored directly with the
+file. seems inevitable we'd have to store one compressed copy of the file to do
+a diff with newly detected content and do mv/rename detection. overlaps with
+git, but don't want to make git a dependency. could use git if present, later on.
 
 ##### group
 
