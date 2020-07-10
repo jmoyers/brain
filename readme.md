@@ -47,9 +47,14 @@ editor context directly
 
 allow group by any front matter property (e.g. group by tags or tag value)
 
-find
-fuzzy file finder for file autocomplete in workspace
-return a list of potential matches by matchyness
+##### find
+
+fuzzy file finder for file autocomplete in workspace. return a list of potential
+matches by matchyness. this is for link autocompletion functionality.
+
+also should consider a more complicated search expression parser. what i mean by
+this is something like this: "'dyanmic programming' in tags order by difficulty
+['easy', 'medium', 'hard']
 
 ## structure
 
@@ -63,3 +68,18 @@ return a list of potential matches by matchyness
 - [ ] write.js - write .brain file with all attributes
 - [ ] attr.js - write a new attribute to be associated witha file
 - [ ] main.js - command line parsing, require all functions in
+
+## idea bucket
+
+- side panel of `related material` which is other notes which have a good
+  likeness in terms of the meta data. for example, you might get a list of other
+  notes related to tags `graph problems` or `depth first search` or the like.
+- create a `study path` which is really a way to navigate a learning topic,
+  start to finish. this would be a graph path thru notes. you retain all the
+  functionality of brain as you do so. could have a fully curated list. could
+  have a dynamically generated list based on some basic intelligence about tags.
+  say given the tag `dynamic programming` it might give you notes sorted like
+  `select * where tags contain 'dynamic programming' order by difficulty, number`
+- link to other brains. imagine git cloning someone elses notes and then
+  referring to them from your own. other referring directly to a github address
+  a la golang modules
