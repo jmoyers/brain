@@ -15,7 +15,8 @@
         "${workspaceRoot}/node_modules/**/*.js",
         "<node_internals>/**"
       ],
-      "smartStep": true
+      "smartStep": true,
+      "sourceMaps": true
     },
     {
       "name": "Jest: Debug All",
@@ -39,7 +40,6 @@
     },
     {
       "name": "Jest: Debug Current File",
-      "smartStep": true,
       "type": "node",
       "request": "launch",
       "skipFiles": [
@@ -49,6 +49,8 @@
       "runtimeArgs": [
         "--inspect-brk",
         "${workspaceRoot}/node_modules/.bin/jest",
+        "--coverage",
+        "false",
         "--runInBand",
         "--config",
         "${workspaceRoot}/jest.config.js",
@@ -57,6 +59,15 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true
+    },
+    {
+      "name": "Run Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "outFiles": ["${workspaceFolder}/build/**/*.js"],
+      "preLaunchTask": "tsc: build - tsconfig.json"
     }
   ]
 }

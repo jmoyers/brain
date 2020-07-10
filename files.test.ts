@@ -17,3 +17,7 @@ test("we should recursively retrieve all files", async () => {
     join(testPath, "test2", "2"),
   ]);
 });
+
+test("test scratch", async () => {
+  const files = await getAllFiles("../scratch");
+});

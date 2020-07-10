@@ -2,7 +2,6 @@
   "name": "brain",
   "version": "0.0.1",
   "description": "relational notes",
-  "main": "main.js",
   "scripts": {
     "test": "jest"
   },
@@ -15,6 +14,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@types/jest": "^26.0.4",
+    "@types/vscode": "^1.47.0",
     "fuzzysort": "^1.1.4",
     "gray-matter": "^4.0.2",
     "lodash": "^4.17.19",
@@ -24,5 +24,22 @@
     "jest": "^26.1.0",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.6"
+  },
+  "main": "./build/extension/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "brainExplore",
+          "name": "Brain Explore"
+        }
+      ]
+    }
+  },
+  "activationEvents": [
+    "onView:brainExplore"
+  ],
+  "engines": {
+    "vscode": "^1.32.0"
   }
 }

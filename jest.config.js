@@ -3,4 +3,5 @@ module.exports = {
   testEnvironment: "node",
   moduleFileExtensions: ["ts", "js"],
   modulePathIgnorePatterns: ["build"],
+  collectCoverage: false,
 };
