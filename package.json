@@ -1,0 +1,28 @@
+{
+  "name": "brain",
+  "version": "0.0.1",
+  "description": "relational notes",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "notes",
+    "zettelkasten",
+    "mindmap"
+  ],
+  "author": "Joshua Moyers",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@types/jest": "^26.0.4",
+    "fuzzysort": "^1.1.4",
+    "gray-matter": "^4.0.2",
+    "lodash": "^4.17.19",
+    "yargs": "^15.4.0"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.6"
+  }
+}
