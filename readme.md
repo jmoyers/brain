@@ -102,9 +102,9 @@ this is something like this: "'dyanmic programming' in tags order by difficulty
 - extension/ (vscode specific files)
 
   - [x] extension.js - root of vscode extension, register tree view
-  - [x] BrainTreeDataProvider.js - the attribute tree view
+  - [ ] tree.js - the attribute tree view
+  - [x] links.js - parse files for [[file]] and link to them directly
 
-  - [ ] LinkProvider.js - parse files for [[file]] and link to them directly
   - [ ] Autocomplete.js - [[context]] aware file/note autocomplete
   - [ ] AttributeView.js - edit attributes for a file, right hand view
   - [ ] RelatedView.js - show other notes which are attribute related
