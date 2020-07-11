@@ -1,28 +1,66 @@
 import getAllFiles from "./files";
 import { resolve } from "path";
-import { writeBrain, readBrain, brainDir, dbFile } from "./brain";
+import { writeBrain, readBrain, resolveBrain } from "./brain";
+import { brainFile, brainDir, infoFile } from "./config";
 import { promises } from "fs";
-const { rmdir, unlink } = promises;
-import { getAllMetaData } from "./parse";
+const { rmdir, unlink, writeFile } = promises;
+import { getAllMetaData, getMetaData } from "./parse";
+import { join } from "path";
+
+const testDir = resolve("./test");
+const testFile = join(testDir, "test_fingerprint1.md");
+
+async function setup(): Promise<void> {
+  try {
+    await unlink(brainFile);
+  } catch (e) {}
+
+  try {
+    await unlink(infoFile);
+  } catch (e) {}
+
+  try {
+    await unlink(testFile);
+  } catch (e) {}
+
+  try {
+    await rmdir(brainDir);
+  } catch (e) {}
+
+  return;
+}
+
+async function createTestFile(): Promise<void> {
+  const fm = [
+    "---",
+    "title: Happy Number",
+    "number: 202",
+    "difficulty: easy",
+    "links:",
+    "- https://leetcode.com/problems/happy-number/",
+    "---",
+  ].join("\n");
+
+  try {
+    await writeFile(testFile, fm, "utf-8");
+  } catch (e) {
+    console.error(e, "Write error front-matter");
+  }
+  return;
+}
+
+async function deleteTestFile(): Promise<void> {
+  try {
+    await unlink(testFile);
+  } catch (e) {}
+  return;
+}
+
+beforeEach(setup);
+afterEach(deleteTestFile);
 
 test("we should be able to write and read a brain", async () => {
   expect.assertions(1);
-
-  const testDir = resolve("./");
-
-  try {
-    console.log(`deleting ${dbFile}`);
-    await unlink(dbFile);
-  } catch (e) {
-    console.log(`${dbFile} doesn't exist yet`);
-  }
-
-  try {
-    console.log(`deleting ${brainDir}`);
-    await rmdir(brainDir);
-  } catch (e) {
-    console.log(`${brainDir} doesn't exist yet`);
-  }
 
   const files = await getAllFiles(testDir);
   const meta = await getAllMetaData(files);
@@ -31,4 +69,26 @@ test("we should be able to write and read a brain", async () => {
   const readMeta = await readBrain();
 
   expect(readMeta).toEqual(meta);
+});
+
+test("we should be able to detect new files and update brain", async () => {
+  expect.assertions(2);
+
+  await resolveBrain(testDir);
+
+  let brain = await readBrain();
+
+  const files = await getAllFiles(testDir);
+  const meta = await getAllMetaData(files);
+
+  expect(brain).toEqual(meta);
+
+  await createTestFile();
+
+  const newBrain = await resolveBrain(testDir);
+
+  const newMeta = await getMetaData(testFile);
+  brain[testFile] = newMeta;
+
+  expect(brain).toEqual(newBrain);
 });

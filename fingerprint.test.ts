@@ -1,12 +1,12 @@
 import { resolve, join } from "path";
 import { promises } from "fs";
 const { writeFile, unlink } = promises;
+import { infoFile } from "./config";
 import {
   fingerprint,
   fingerprintAll,
   shouldUpdate,
   filterShouldUpdate,
-  infoFile,
   writeInfo,
   readInfo,
 } from "./fingerprint";
@@ -48,7 +48,13 @@ async function setupTests(): Promise<void> {
 async function teardownTests() {
   try {
     await unlink(testFile1);
+  } catch (e) {}
+
+  try {
     await unlink(testFile2);
+  } catch (e) {}
+
+  try {
     await unlink(infoFile);
   } catch (e) {}
   return;
@@ -125,11 +131,8 @@ test("we should be able to write and read info meta data", async () => {
   expect.assertions(1);
 
   try {
-    console.log(`deleting ${infoFile}`);
     await unlink(infoFile);
-  } catch (e) {
-    console.log(`${infoFile} doesn't exist yet`);
-  }
+  } catch (e) {}
 
   const files = [testFile1, testFile2];
   const info = await fingerprintAll(files);

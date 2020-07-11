@@ -18,12 +18,6 @@ test("parse front matter for all files", async () => {
       links: ["https://leetcode.com/problems/happy-number/"],
       difficulty: "easy",
     },
-    [join(testPath, "test_fingerprint.md")]: {
-      title: "Happy Number",
-      number: 202,
-      links: ["https://leetcode.com/problems/happy-number/"],
-      difficulty: "easy",
-    },
     [join(testPath, "412.py")]: {
       title: "Fizz Buzz",
       number: 412,

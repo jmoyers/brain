@@ -1,13 +1,11 @@
 import * as vscode from "vscode";
 const { Collapsed, Expanded, None } = vscode.TreeItemCollapsibleState;
-import getAllFiles from "../files";
-import getMetaData from "../parse";
 import groupBy from "../group";
+import { resolveBrain } from "../brain";
 
 export class BrainTreeDataProvider
   implements vscode.TreeDataProvider<Dependency> {
-  files: Array<string>;
-  meta: Object;
+  brain: Object;
   groups: Object;
 
   constructor(private workspaceRoot: string) {}
@@ -23,9 +21,8 @@ export class BrainTreeDataProvider
     }
 
     if (!element) {
-      this.files = await getAllFiles(this.workspaceRoot);
-      this.meta = await getMetaData(this.files);
-      this.groups = groupBy(this.meta);
+      this.brain = await resolveBrain(this.workspaceRoot);
+      this.groups = groupBy(this.brain);
 
       const deps: Dependency[] = [];
 

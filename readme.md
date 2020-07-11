@@ -106,8 +106,7 @@ this is something like this: "'dyanmic programming' in tags order by difficulty
   - [ ] Autocomplete.js - [[context]] aware file/note autocomplete
   - [ ] RelatedView.js - show other notes which are attribute related
 - [x] brain.js - given a meta structure, write and read .brain
-- [ ] fingerprint.js - fingerprint files in brain, check database validity
-- [ ] attr.js - given a meta structure, write or read attr for a given file
+- [x] fingerprint.js - fingerprint files in brain, check database validity
 - [ ] main.js - command line parsing, require all functions in
 
 ## idea bucket
