@@ -5,28 +5,41 @@ import getAllFiles from "./files";
 import { fingerprintAll, readInfo, writeInfo } from "./fingerprint";
 import lodash from "lodash";
 import { getAllMetaData } from "./parse";
-import { brainFile, brainDir } from "./config";
 
-export async function ensureBrainDir(): Promise<void> {
+export async function ensureBrainDir(dir?: string): Promise<void> {
+  dir = dir || resolve("./");
+
   try {
-    await stat(brainDir);
+    await stat(join(dir, ".brain"));
   } catch (e) {
-    await mkdir(brainDir);
+    await mkdir(join(dir, ".brain"));
   }
 }
 
-export async function writeBrain(meta: Object): Promise<void> {
-  await ensureBrainDir();
+export async function writeBrain(meta: Object, dir?: string): Promise<void> {
+  dir = dir || resolve("./");
+
+  await ensureBrainDir(dir);
+
+  const brainFile = join(dir, ".brain", "brain");
   return writeFile(brainFile, JSON.stringify(meta, null, 2), "utf-8");
 }
 
-export async function readBrain(): Promise<Object> {
+export async function readBrain(dir?: string): Promise<Object> {
+  dir = dir || resolve("./");
+
+  const brainFile = join(dir, ".brain", "brain");
+
   const contents = await readFile(brainFile, "utf-8");
   const meta = JSON.parse(contents);
   return meta;
 }
 
-export async function brainExists(): Promise<boolean> {
+export async function brainExists(dir?: string): Promise<boolean> {
+  dir = dir || resolve("./");
+
+  const brainFile = join(dir, ".brain", "brain");
+
   try {
     await stat(brainFile);
     return true;
@@ -41,8 +54,8 @@ export async function resolveBrain(dir?: string): Promise<Object> {
   // read brain
   let brain: Object = {};
 
-  if (await brainExists()) {
-    brain = await readBrain();
+  if (await brainExists(dir)) {
+    brain = await readBrain(dir);
   }
 
   // get all files out there
@@ -72,10 +85,10 @@ export async function resolveBrain(dir?: string): Promise<Object> {
 
   // we're leaving danglers in there for now, if something has changed
 
-  await writeBrain(brain);
+  await writeBrain(brain, dir);
 
   // update info as required
-  await writeInfo(fps);
+  await writeInfo(fps, dir);
 
   // return brain to caller
   return brain;

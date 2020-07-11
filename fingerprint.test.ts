@@ -1,7 +1,7 @@
 import { resolve, join } from "path";
 import { promises } from "fs";
 const { writeFile, unlink } = promises;
-import { infoFile } from "./config";
+
 import {
   fingerprint,
   fingerprintAll,
@@ -12,6 +12,7 @@ import {
 } from "./fingerprint";
 
 const testDir = resolve("./test");
+const infoFile = join(testDir, ".brain", "info");
 const testFile1 = join(testDir, "test_fingerprint1.md");
 const testFile2 = join(testDir, "test_fingerprint2.md");
 

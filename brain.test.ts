@@ -1,13 +1,15 @@
 import getAllFiles from "./files";
 import { resolve } from "path";
 import { writeBrain, readBrain, resolveBrain } from "./brain";
-import { brainFile, brainDir, infoFile } from "./config";
 import { promises } from "fs";
 const { rmdir, unlink, writeFile } = promises;
 import { getAllMetaData, getMetaData } from "./parse";
 import { join } from "path";
 
 const testDir = resolve("./test");
+const brainDir = join(testDir, ".brain");
+const brainFile = join(testDir, ".brain", "brain");
+const infoFile = join(testDir, ".brain", "info");
 const testFile = join(testDir, "test_fingerprint1.md");
 
 async function setup(): Promise<void> {

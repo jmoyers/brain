@@ -1,17 +1,27 @@
 import { promises } from "fs";
 const { readFile, writeFile, stat } = promises;
-import { join } from "path";
+import { join, resolve } from "path";
 import crypto from "crypto";
-import { ensureBrainDir } from "./brain";
-import { infoFile } from "./config";
+import { ensureBrainDir, resolveBrain } from "./brain";
 
-export async function writeInfo(fingerprints: object): Promise<void> {
-  await ensureBrainDir();
+export async function writeInfo(
+  fingerprints: object,
+  dir?: string
+): Promise<void> {
+  dir = dir || resolve("./");
+
+  const infoFile = join(dir, ".brain", "info");
+
+  await ensureBrainDir(dir);
 
   return writeFile(infoFile, JSON.stringify(fingerprints, null, 2), "utf-8");
 }
 
-export async function readInfo(): Promise<Object> {
+export async function readInfo(dir?: string): Promise<Object> {
+  dir = dir || resolve("./");
+
+  const infoFile = join(dir, ".brain", "info");
+
   let contents: string = "";
 
   try {
