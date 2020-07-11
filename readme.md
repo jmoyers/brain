@@ -70,7 +70,15 @@ also here we need to detect dangling references -- file got moved, deleted,
 renamed. really don't want to lose meta data that isn't stored directly with the
 file. seems inevitable we'd have to store one compressed copy of the file to do
 a diff with newly detected content and do mv/rename detection. overlaps with
-git, but don't want to make git a dependency. could use git if present, later on.
+git, but don't want to make git a dependency. could use git if present, later
+on.
+
+as far as cache invalidation, we need to use something to determine if a file
+has changed and so therefore has invalidated a portion of our brain. we can use
+the sha1 of the contents of a file and map it to the name for now. we can store
+that in .brain/fingerprint. we also need the modified time, if we're not going
+to check the contents of every file every time -- compare file stats, on finding
+a difference, compute sha1, if different compute metadata
 
 ##### group
 
@@ -97,7 +105,8 @@ this is something like this: "'dyanmic programming' in tags order by difficulty
   - [ ] AttributeView.js - edit attributes for a file, right hand view
   - [ ] Autocomplete.js - [[context]] aware file/note autocomplete
   - [ ] RelatedView.js - show other notes which are attribute related
-- [ ] brain.js - given a meta structure, write and read .brain
+- [x] brain.js - given a meta structure, write and read .brain
+- [ ] fingerprint.js - fingerprint files in brain, check database validity
 - [ ] attr.js - given a meta structure, write or read attr for a given file
 - [ ] main.js - command line parsing, require all functions in
 

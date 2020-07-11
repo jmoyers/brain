@@ -1,6 +1,6 @@
 import getAllFiles from "./files";
 import { resolve, join } from "path";
-import getMetaData from "./parse";
+import { getAllMetaData } from "./parse";
 
 test("parse front matter for all files", async () => {
   expect.assertions(1);
@@ -9,10 +9,16 @@ test("parse front matter for all files", async () => {
 
   const files = await getAllFiles(testPath);
 
-  const meta = await getMetaData(files);
+  const meta = await getAllMetaData(files);
 
   expect(meta).toEqual({
     [join(testPath, "202.py")]: {
+      title: "Happy Number",
+      number: 202,
+      links: ["https://leetcode.com/problems/happy-number/"],
+      difficulty: "easy",
+    },
+    [join(testPath, "test_fingerprint.md")]: {
       title: "Happy Number",
       number: 202,
       links: ["https://leetcode.com/problems/happy-number/"],
