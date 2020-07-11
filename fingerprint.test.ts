@@ -1,11 +1,14 @@
 import { resolve, join } from "path";
 import { promises } from "fs";
-const { readFile, writeFile, utimes } = promises;
+const { writeFile, unlink } = promises;
 import {
   fingerprint,
   fingerprintAll,
   shouldUpdate,
-  filterNeedsUpdate,
+  filterShouldUpdate,
+  infoFile,
+  writeInfo,
+  readInfo,
 } from "./fingerprint";
 
 const testDir = resolve("./test");
@@ -32,16 +35,32 @@ const testFrontMatter2 = [
   "---",
 ].join("\n");
 
+async function setupTests(): Promise<void> {
+  try {
+    await writeFile(testFile1, testFrontMatter1, "utf-8");
+    await writeFile(testFile2, testFrontMatter2, "utf-8");
+  } catch (e) {
+    console.error(e, "Write error front-matter");
+  }
+  return;
+}
+
+async function teardownTests() {
+  try {
+    await unlink(testFile1);
+    await unlink(testFile2);
+    await unlink(infoFile);
+  } catch (e) {}
+  return;
+}
+
+beforeEach(setupTests);
+afterEach(teardownTests);
+
 test("we should be able to fingerprint a file", async () => {
   expect.assertions(2);
 
   const before = new Date(Date.now() - 1000);
-
-  try {
-    await writeFile(testFile1, testFrontMatter1, "utf-8");
-  } catch (e) {
-    console.error(e, "Write error front-matter");
-  }
 
   const fp = await fingerprint(testFile1);
 
@@ -51,12 +70,6 @@ test("we should be able to fingerprint a file", async () => {
 
 test("should be able to detect a old mtime needs updating", async () => {
   expect.assertions(2);
-
-  try {
-    await writeFile(testFile1, testFrontMatter1, "utf-8");
-  } catch (e) {
-    console.error(e, "Write error front-matter");
-  }
 
   const fp = await fingerprint(testFile1);
 
@@ -73,13 +86,6 @@ test("should be able to detect a old mtime needs updating", async () => {
 
 test("should fingerprint all files in a list", async () => {
   expect.assertions(1);
-
-  try {
-    await writeFile(testFile1, testFrontMatter1, "utf-8");
-    await writeFile(testFile2, testFrontMatter2, "utf-8");
-  } catch (e) {
-    console.error(e, "Write error front-matter");
-  }
 
   const files = [testFile1, testFile2];
   const fps = await fingerprintAll(files);
@@ -102,20 +108,34 @@ test("should fingerprint all files in a list", async () => {
 test("should filter all files that don't need an update", async () => {
   expect.assertions(1);
 
-  try {
-    await writeFile(testFile1, testFrontMatter1, "utf-8");
-    await writeFile(testFile2, testFrontMatter2, "utf-8");
-  } catch (e) {
-    console.error(e, "Write error front-matter");
-  }
-
   const files = [testFile1, testFile2];
   const fps = await fingerprintAll(files);
 
-  const fp1 = await fingerprint(testFile1);
-  const fp2 = await fingerprint(testFile1);
-
   const older = new Date(Date.now() - 400 * 60 * 60);
 
-  //expect(fps).toEqual();
+  const names = Object.keys(fps);
+  fps[names[1]]["mtime"] = older;
+
+  const filesToUpdate = await filterShouldUpdate(fps);
+
+  expect(filesToUpdate).toEqual([names[1]]);
+});
+
+test("we should be able to write and read info meta data", async () => {
+  expect.assertions(1);
+
+  try {
+    console.log(`deleting ${infoFile}`);
+    await unlink(infoFile);
+  } catch (e) {
+    console.log(`${infoFile} doesn't exist yet`);
+  }
+
+  const files = [testFile1, testFile2];
+  const info = await fingerprintAll(files);
+
+  await writeInfo(info);
+  const read = await readInfo();
+
+  expect(read).toEqual(info);
 });

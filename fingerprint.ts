@@ -1,6 +1,27 @@
 import { promises } from "fs";
 const { readFile, writeFile, stat } = promises;
+import { join } from "path";
 import crypto from "crypto";
+import { ensureBrainDir, brainDir } from "./brain";
+
+export const infoFile = join(brainDir, "info");
+
+export async function writeInfo(fingerprints: object): Promise<void> {
+  await ensureBrainDir();
+
+  return writeFile(infoFile, JSON.stringify(fingerprints, null, 2), "utf-8");
+}
+
+export async function readInfo(): Promise<Object> {
+  const contents = await readFile(infoFile, "utf-8");
+  const info = JSON.parse(contents);
+
+  for (const file in info) {
+    info[file]["mtime"] = new Date(info[file]["mtime"]);
+  }
+
+  return info;
+}
 
 export async function fingerprintAll(files: string[]): Promise<Object> {
   // stat all the files and find modified time
@@ -56,8 +77,8 @@ export async function shouldUpdate(
   return fingerprint["mtime"] < (await mtime(file));
 }
 
-export async function filterNeedsUpdate(
-  fingerprints: object[]
+export async function filterShouldUpdate(
+  fingerprints: object
 ): Promise<string[]> {
   const results: string[] = [];
   for (const file in fingerprints) {

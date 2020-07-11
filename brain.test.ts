@@ -1,15 +1,13 @@
 import getAllFiles from "./files";
-import { resolve, join } from "path";
-import { writeBrain, readBrain } from "./brain";
+import { resolve } from "path";
+import { writeBrain, readBrain, brainDir, dbFile } from "./brain";
 import { promises } from "fs";
 const { rmdir, unlink } = promises;
-import getMetaData from "./parse";
+import { getAllMetaData } from "./parse";
 
 test("we should be able to write and read a brain", async () => {
   expect.assertions(1);
 
-  const brainDir = resolve("./.brain");
-  const dbFile = join(brainDir, "database");
   const testDir = resolve("./");
 
   try {
@@ -27,9 +25,9 @@ test("we should be able to write and read a brain", async () => {
   }
 
   const files = await getAllFiles(testDir);
-  const meta = await getMetaData(files);
+  const meta = await getAllMetaData(files);
 
-  const written = await writeBrain(meta);
+  await writeBrain(meta);
   const readMeta = await readBrain();
 
   expect(readMeta).toEqual(meta);
