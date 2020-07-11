@@ -4,7 +4,8 @@
     "target": "ES6",
     "sourceMap": true,
     "outDir": "build",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["ES2020"]
   },
   "exclude": ["node_modules", "**/node_modules/*"]
 }
