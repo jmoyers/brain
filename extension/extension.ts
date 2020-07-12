@@ -7,9 +7,17 @@ import { getLinkProvider } from "./links";
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  vscode.window.registerTreeDataProvider(
-    "brainExplore",
-    new BrainTreeDataProvider(vscode.workspace.rootPath)
+  const brainExplore = new BrainTreeDataProvider(vscode.workspace.rootPath);
+  vscode.window.registerTreeDataProvider("brainExplore", brainExplore);
+
+  vscode.commands.registerCommand("brainExplore.refresh", () => {
+    brainExplore.refresh();
+  });
+
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeTextDocument((e) => {
+      vscode.commands.executeCommand("brainExplore.refresh");
+    })
   );
 
   context.subscriptions.push(getLinkProvider());

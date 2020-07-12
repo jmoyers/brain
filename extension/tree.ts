@@ -34,10 +34,23 @@ function makeTreeLink(
 }
 export class BrainTreeDataProvider
   implements vscode.TreeDataProvider<BrainTreeItem> {
-  brain: Object;
-  groups: Object;
+  private brain: Object;
+  private groups: Object;
 
   constructor(private workspaceRoot: string) {}
+
+  private _onDidChangeTreeData: vscode.EventEmitter<
+    BrainTreeItem | undefined | void
+  > = new vscode.EventEmitter<BrainTreeItem | undefined | void>();
+
+  readonly onDidChangeTreeData: vscode.Event<
+    BrainTreeItem | undefined | void
+  > = this._onDidChangeTreeData.event;
+
+  refresh(): void {
+    // passing no item signifies root changed
+    this._onDidChangeTreeData.fire();
+  }
 
   // vscode required
   getTreeItem(element: BrainTreeItem): vscode.TreeItem {

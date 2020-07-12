@@ -30,6 +30,12 @@
   },
   "main": "./build/extension/extension.js",
   "contributes": {
+    "commands": [
+      {
+        "command": "brainExplore.refresh",
+        "title": "Refresh"
+      }
+    ],
     "views": {
       "explorer": [
         {
