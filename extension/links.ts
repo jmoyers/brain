@@ -4,14 +4,14 @@ import { promises } from "fs";
 import { filterShouldUpdate } from "../fingerprint";
 const { stat } = promises;
 
-const linkPattern = /\[\[(.*)\]\]/;
+const linkPattern = /\[\[(.*)\]\]/g;
 
 class BrainLinkProvider implements vscode.DocumentLinkProvider {
   // required by vscode
   async provideDocumentLinks(document: vscode.TextDocument) {
     const results = [];
 
-    const matches = document.getText().matchAll(linkPattern);
+    const matches = Array.from(document.getText().matchAll(linkPattern));
 
     for (const match of matches) {
       if (match.length < 2 || match[1].length <= 0) continue;
@@ -20,6 +20,7 @@ class BrainLinkProvider implements vscode.DocumentLinkProvider {
 
       // + 2 due to [[
       const linkStart = document.positionAt(match.index + 2);
+
       const linkEnd = document.positionAt(match.index + 2 + linkPath.length);
 
       const uriPath = join(vscode.workspace.rootPath, normalize(linkPath));
