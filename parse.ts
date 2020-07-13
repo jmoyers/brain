@@ -4,9 +4,23 @@ import fs from "fs";
 
 const readFile = util.promisify(fs.readFile);
 
+function getLineBreakChar(string) {
+  const indexOfLF = string.indexOf("\n", 1); // No need to check first-character
+
+  if (indexOfLF === -1) {
+    if (string.indexOf("\r") !== -1) return "\r";
+
+    return "\n";
+  }
+
+  if (string[indexOfLF - 1] === "\r") return "\r\n";
+
+  return "\n";
+}
+
 export async function getMetaData(file: string): Promise<object | void> {
   const contents: string = await readFile(file, "utf8");
-  const lines: string[] = contents.split("\n");
+  const lines: string[] = contents.split(getLineBreakChar(contents));
 
   const meta_block: string[] = [];
   let meta_start: boolean = false;

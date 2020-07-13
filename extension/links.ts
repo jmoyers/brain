@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
-import { join, normalize } from "path";
+import { join, normalize, resolve } from "path";
 import { promises } from "fs";
-import { filterShouldUpdate } from "../fingerprint";
 const { stat } = promises;
 
 const linkPattern = /\[\[(.*)\]\]/g;
@@ -23,7 +22,9 @@ class BrainLinkProvider implements vscode.DocumentLinkProvider {
 
       const linkEnd = document.positionAt(match.index + 2 + linkPath.length);
 
-      const uriPath = join(vscode.workspace.rootPath, normalize(linkPath));
+      const uriPath = resolve(
+        join(vscode.workspace.rootPath, normalize(linkPath))
+      );
 
       try {
         const s = await stat(uriPath);
@@ -38,7 +39,7 @@ class BrainLinkProvider implements vscode.DocumentLinkProvider {
 
       const link = new vscode.DocumentLink(
         new vscode.Range(linkStart, linkEnd),
-        vscode.Uri.parse(`file://${uriPath}`)
+        vscode.Uri.file(`${uriPath}`)
       );
 
       results.push(link);
