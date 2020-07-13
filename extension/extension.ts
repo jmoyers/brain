@@ -7,12 +7,10 @@ import { BrainCompletionProvider } from "./completion";
 import { brainExists, resolveBrain } from "../brain";
 
 export async function activate(context: vscode.ExtensionContext) {
-  if (!(await brainExists(vscode.workspace.rootPath))) {
-    vscode.commands.registerCommand("brain.create", async () => {
-      await resolveBrain(vscode.workspace.rootPath);
-      vscode.commands.executeCommand("brain.explore.refresh");
-    });
-  }
+  vscode.commands.registerCommand("brain.create", async () => {
+    await resolveBrain(vscode.workspace.rootPath);
+    vscode.commands.executeCommand("brain.explore.refresh");
+  });
 
   const explore = new BrainTreeDataProvider();
 
