@@ -17,7 +17,7 @@ function makeTreeLink(
   treeItem.description = description;
 
   // special case where if there is one element, we'll link directly
-  const uri = vscode.Uri.parse(`file://${link}`);
+  const uri = vscode.Uri.file(`${link}`);
 
   // gives it an icon i guess, doesn't open when clicked though
   treeItem.resourceUri = uri;
