@@ -101,17 +101,18 @@ this is something like this: "'dyanmic programming' in tags order by difficulty
 - [x] files.js - recursively list all files not ignored, parse .brainignore
 - extension/ (vscode specific files)
 
-  - [x] extension.js - root of vscode extension, register tree view
-  - [ ] tree.js - the attribute tree view
+  - [ ] extension.js - root of vscode extension, register tree view
+    - check if .brain exists, if not, don't load everything
+    - register command for creating a brain in the current workspace root
+  - [x] tree.js - the attribute tree view
   - [x] links.js - parse files for [[file]] and link to them directly
-
-  - [ ] Autocomplete.js - [[context]] aware file/note autocomplete
-  - [ ] AttributeView.js - edit attributes for a file, right hand view
-  - [ ] RelatedView.js - show other notes which are attribute related
+  - [ ] autocomplete.js - [[context]] aware file/note autocomplete
+        -- mvp --
+  - [ ] attributes.js - edit attributes for a file, right hand view
+  - [ ] related.js - show other notes which are attribute related
 
 - [x] brain.js - given a meta structure, write and read .brain
 - [x] fingerprint.js - fingerprint files in brain, check database validity
-
 - [ ] main.js - command line parsing, require all functions in
 
 ## idea bucket

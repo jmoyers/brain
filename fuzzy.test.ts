@@ -1,6 +1,6 @@
 import { resolve, join } from "path";
-import findInWorkspace from "./fuzzy";
-import getAllFiles from "./files";
+import { findInWorkspace } from "./fuzzy";
+import { getAllFiles } from "./files";
 
 test("find a file in a workspace", async () => {
   expect.assertions(2);
@@ -9,6 +9,6 @@ test("find a file in a workspace", async () => {
   const files = await getAllFiles(testPath);
   const file = findInWorkspace("1", files);
 
-  expect(file[0]).toEqual(join(testPath, "1"));
-  expect(file[1]).toEqual(join(testPath, "test2", "1"));
+  expect(file[0]).toEqual("1");
+  expect(file[1]).toEqual(join("test2", "1"));
 });

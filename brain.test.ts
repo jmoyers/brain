@@ -1,4 +1,4 @@
-import getAllFiles from "./files";
+import { getAllFiles } from "./files";
 import { resolve } from "path";
 import { writeBrain, readBrain, resolveBrain } from "./brain";
 import { promises } from "fs";
@@ -64,7 +64,7 @@ afterEach(deleteTestFile);
 test("we should be able to write and read a brain", async () => {
   expect.assertions(1);
 
-  const files = await getAllFiles(testDir);
+  const files = await getAllFiles(testDir, [], true);
   const meta = await getAllMetaData(files);
 
   await writeBrain(meta);
@@ -80,7 +80,7 @@ test("we should be able to detect new files and update brain", async () => {
 
   let brain = await readBrain();
 
-  const files = await getAllFiles(testDir);
+  const files = await getAllFiles(testDir, [], true);
   const meta = await getAllMetaData(files);
 
   expect(brain).toEqual(meta);

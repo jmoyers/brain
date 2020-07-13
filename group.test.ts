@@ -1,4 +1,4 @@
-import getAllFiles from "./files";
+import { getAllFiles } from "./files";
 import { resolve, join } from "path";
 import { getAllMetaData } from "./parse";
 import groupBy from "./group";
@@ -7,7 +7,7 @@ test("group files by attributes", async () => {
   expect.assertions(1);
 
   const testPath = resolve("./test");
-  const files = await getAllFiles(testPath);
+  const files = await getAllFiles(testPath, [], true);
   const meta = await getAllMetaData(files);
 
   const groups = groupBy(meta);

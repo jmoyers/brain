@@ -25,7 +25,11 @@ class BrainLinkProvider implements vscode.DocumentLinkProvider {
       const uriPath = join(vscode.workspace.rootPath, normalize(linkPath));
 
       try {
-        await stat(uriPath);
+        const s = await stat(uriPath);
+
+        if (s.isDirectory()) {
+          continue;
+        }
       } catch (e) {
         // if we encounter an invalid path, get ye gone
         continue;

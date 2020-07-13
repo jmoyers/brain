@@ -1,9 +1,6 @@
-import { readdir as _readdir, stat as _stat } from "fs";
+import { promises } from "fs";
+const { readdir, stat } = promises;
 import { resolve, join } from "path";
-import { promisify } from "util";
-
-const readdir = promisify(_readdir);
-const stat = promisify(_stat);
 
 const ignoreList: Array<string> = [
   ".brain",
@@ -16,7 +13,7 @@ const ignoreList: Array<string> = [
   "env",
 ];
 
-const includesIgnored = (path: Array<string> | string): boolean => {
+function includesIgnored(path: Array<string> | string): boolean {
   if (Array.isArray(path)) {
     for (const p of path) {
       for (const i of ignoreList) {
@@ -34,12 +31,13 @@ const includesIgnored = (path: Array<string> | string): boolean => {
   }
 
   return false;
-};
+}
 
-const getAllFiles = async (
+export async function getAllFiles(
   dirPath: string,
-  results?: Array<string>
-): Promise<Array<string>> => {
+  results?: Array<string>,
+  absolute?: boolean
+): Promise<Array<string>> {
   if (includesIgnored(dirPath)) return results;
 
   const files = await readdir(dirPath);
@@ -51,13 +49,17 @@ const getAllFiles = async (
     const stats = await stat(name);
 
     if (stats.isDirectory()) {
-      results = await getAllFiles(name, results);
+      results = await getAllFiles(name, results, true);
     } else if (!includesIgnored(name)) {
       results.push(name);
     }
   }
 
-  return results;
-};
+  if (!absolute) {
+    results = results.map((f) => f.replace(dirPath, ""));
+    results = results.map((f) => f.replace(/^\/+/, ""));
+    results = results.map((f) => f.replace(/^\\+/, ""));
+  }
 
-export default getAllFiles;
+  return results;
+}

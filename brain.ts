@@ -1,7 +1,7 @@
 import { promises } from "fs";
 const { writeFile, readFile, stat, mkdir } = promises;
 import { join, resolve } from "path";
-import getAllFiles from "./files";
+import { getAllFiles } from "./files";
 import { fingerprintAll, readInfo, writeInfo } from "./fingerprint";
 import lodash from "lodash";
 import { getAllMetaData } from "./parse";
@@ -59,7 +59,7 @@ export async function resolveBrain(dir?: string): Promise<Object> {
   }
 
   // get all files out there
-  const files = await getAllFiles(dir);
+  const files = await getAllFiles(dir, [], true);
 
   // check fingerpints of files
   const fps = await fingerprintAll(files);

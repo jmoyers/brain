@@ -1,4 +1,4 @@
-import getAllFiles from "./files";
+import { getAllFiles } from "./files";
 import { resolve, join } from "path";
 import { getAllMetaData } from "./parse";
 
@@ -7,7 +7,7 @@ test("parse front matter for all files", async () => {
 
   const testPath = resolve("./test");
 
-  const files = await getAllFiles(testPath);
+  const files = await getAllFiles(testPath, [], true);
 
   const meta = await getAllMetaData(files);
 
