@@ -1,12 +1,19 @@
 # Brain Notes
 
+Linking Files
+
+![Linking Demo](https://user-images.githubusercontent.com/235505/87277982-44689880-c498-11ea-9f15-d999c581f75d.gif)
+
+Meta Data for Notes
+
+![Tree View Demo](https://user-images.githubusercontent.com/235505/87277992-47fc1f80-c498-11ea-82a7-6c29411822e5.gif)
+
 ## features
 
 - [x] read front matter recursively in any non-excluded file or directory
 - [x] allow group by any front matter property (e.g. group by tags or tag value)
 - [x] fuzzy file finder for file autocomplete in workspace
-- [ ] exclude list .brainignore, exclude binary files by default for parsing
-- [ ] .brain cache/database - we need a db for binary files
+- [x] .brain cache/database - we need a db for binary files
 
 ---
 
@@ -14,7 +21,6 @@
 - [ ] allow nth group by (group by tag THEN frequency THEN difficulty)
 - [ ] broken link finder
 - [ ] move/rename diff detection
-- [ ] content-type plugin utility
 
 ## code
 
@@ -101,12 +107,12 @@ this is something like this: "'dyanmic programming' in tags order by difficulty
 - [x] files.js - recursively list all files not ignored, parse .brainignore
 - extension/ (vscode specific files)
 
-  - [ ] extension.js - root of vscode extension, register tree view
+  - [x] extension.js - root of vscode extension, register tree view
     - check if .brain exists, if not, don't load everything
     - register command for creating a brain in the current workspace root
   - [x] tree.js - the attribute tree view
   - [x] links.js - parse files for [[file]] and link to them directly
-  - [ ] autocomplete.js - [[context]] aware file/note autocomplete
+  - [x] complete.js - [[context]] aware file/note autocomplete
         -- mvp --
   - [ ] attributes.js - edit attributes for a file, right hand view
   - [ ] related.js - show other notes which are attribute related
