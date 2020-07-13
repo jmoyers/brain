@@ -32,21 +32,27 @@
   "contributes": {
     "commands": [
       {
-        "command": "brainExplore.refresh",
-        "title": "Refresh"
+        "command": "brain.explore.refresh",
+        "title": "Brain: Refresh"
+      },
+      {
+        "command": "brain.create",
+        "title": "Brain: Create Brain"
       }
     ],
     "views": {
       "explorer": [
         {
-          "id": "brainExplore",
-          "name": "Brain Explore"
+          "id": "brain.explore",
+          "name": "Brain: Explore"
         }
       ]
     }
   },
   "activationEvents": [
-    "onView:brainExplore"
+    "onCommand:brain.create",
+    "onView:brain.explore",
+    "workspaceContains:**/.brain/brain"
   ],
   "engines": {
     "vscode": "^1.32.0"

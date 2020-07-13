@@ -4,20 +4,33 @@ import * as vscode from "vscode";
 import { BrainTreeDataProvider } from "./tree";
 import { getLinkProvider } from "./links";
 import { BrainCompletionProvider } from "./completion";
+import { brainExists, resolveBrain } from "../brain";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-  const brainExplore = new BrainTreeDataProvider(vscode.workspace.rootPath);
-  vscode.window.registerTreeDataProvider("brainExplore", brainExplore);
+export async function activate(context: vscode.ExtensionContext) {
+  if (!(await brainExists(vscode.workspace.rootPath))) {
+    vscode.commands.registerCommand("brain.create", async () => {
+      await resolveBrain(vscode.workspace.rootPath);
+      vscode.commands.executeCommand("brain.explore.refresh");
+    });
+  }
 
-  vscode.commands.registerCommand("brainExplore.refresh", () => {
-    brainExplore.refresh();
+  const explore = new BrainTreeDataProvider();
+
+  vscode.window.registerTreeDataProvider("brain.explore", explore);
+
+  vscode.commands.registerCommand("brain.explore.refresh", () => {
+    explore.refresh();
   });
 
   context.subscriptions.push(
     vscode.workspace.onDidSaveTextDocument((e) => {
-      vscode.commands.executeCommand("brainExplore.refresh");
+      vscode.commands.executeCommand("brain.explore.refresh");
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.workspace.onDidDeleteFiles((e) => {
+      vscode.commands.executeCommand("brain.explore.refresh");
     })
   );
 

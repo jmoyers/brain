@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 const { Collapsed, None } = vscode.TreeItemCollapsibleState;
 import groupBy from "../group";
-import { resolveBrain } from "../brain";
+import { resolveBrain, brainExists } from "../brain";
 import { parse } from "path";
 
 function makeTreeLink(
@@ -34,21 +34,24 @@ function makeTreeLink(
 }
 export class BrainTreeDataProvider
   implements vscode.TreeDataProvider<BrainTreeItem> {
-  private brain: Object;
-  private groups: Object;
-
-  constructor(private workspaceRoot: string) {}
-
   private _onDidChangeTreeData: vscode.EventEmitter<
     BrainTreeItem | undefined | void
   > = new vscode.EventEmitter<BrainTreeItem | undefined | void>();
+
+  private brain: Object;
 
   readonly onDidChangeTreeData: vscode.Event<
     BrainTreeItem | undefined | void
   > = this._onDidChangeTreeData.event;
 
-  refresh(): void {
+  async refresh(): Promise<void> {
     // passing no item signifies root changed
+    if (await brainExists(vscode.workspace.rootPath)) {
+      this.brain = await resolveBrain(vscode.workspace.rootPath);
+    } else {
+      this.brain = undefined;
+      vscode.window.showWarningMessage("No brain detected.");
+    }
     this._onDidChangeTreeData.fire();
   }
 
@@ -59,14 +62,14 @@ export class BrainTreeDataProvider
 
   // vscode required
   async getChildren(element?: BrainTreeItem): Promise<BrainTreeItem[]> {
-    if (!this.workspaceRoot) {
+    if (!this.brain && (await brainExists(vscode.workspace.rootPath))) {
+      this.brain = await resolveBrain(vscode.workspace.rootPath);
+    } else if (!this.brain) {
       return [];
     }
 
     if (!element) {
-      this.brain = await resolveBrain(this.workspaceRoot);
-
-      this.groups = groupBy(this.brain);
+      const groups = groupBy(this.brain);
 
       // data will be structured like
       // {
@@ -77,11 +80,11 @@ export class BrainTreeDataProvider
 
       const children: BrainTreeItem[] = [];
 
-      for (const p in this.groups) {
+      for (const p in groups) {
         const item = new BrainTreeItem(p, Collapsed);
 
         // an object always at the start
-        item.children = this.groups[p];
+        item.children = groups[p];
 
         children.push(item);
       }
