@@ -1,6 +1,11 @@
 {
   "name": "brain",
   "version": "0.0.1",
+  "displayName": "Brain: Take and Organize Notes",
+  "categories": [
+    "Other"
+  ],
+  "publisher": "jmoyers-org",
   "description": "relational notes",
   "scripts": {
     "test": "jest"

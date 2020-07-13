@@ -50,7 +50,6 @@ export class BrainTreeDataProvider
       this.brain = await resolveBrain(vscode.workspace.rootPath);
     } else {
       this.brain = undefined;
-      vscode.window.showWarningMessage("No brain detected.");
     }
     this._onDidChangeTreeData.fire();
   }

@@ -18,7 +18,7 @@ export class BrainCompletionProvider
       return [];
     }
 
-    const prefix = linePrefix.slice(2);
+    const prefix = linePrefix.slice(linePrefix.lastIndexOf("[") + 1);
 
     const files = await getAllFiles(vscode.workspace.rootPath);
 

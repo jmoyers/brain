@@ -37,7 +37,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(getLinkProvider());
 
   const completionProvider = vscode.languages.registerCompletionItemProvider(
-    { scheme: "file", language: "python" },
+    { scheme: "file" },
     new BrainCompletionProvider(),
     "["
   );
